@@ -173,7 +173,7 @@ if uploaded_file is not None:
                     st.success("🎉 **Luar biasa!** Kebutuhan gizi untuk makan siang Anda sudah **Terpenuhi Sempurna** untuk semua komponen.")
                 else:
                     komponen_string = ", ".join(komponen_kurang)
-                    st.warning(f"**Perhatian:** Porsi makan siang Anda masih **belum memenuhi target** untuk komponen: **{komlepon_string}**.")
+                    st.warning(f"**Perhatian:** Porsi makan siang Anda masih **belum memenuhi target** untuk komponen: **{komponen_string}**.")
                     st.info("Pastikan untuk melengkapi kebutuhan gizi ini di waktu makan lainnya atau dengan menambahkan porsi.")
             
             else:
