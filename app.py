@@ -27,9 +27,6 @@ akg_profiles = {
     },
     "Ibu Hamil (Trimester 2 & 3)": {
         'Energi (kkal)': 2550, 'Protein (g)': 90, 'Lemak (g)': 70, 'Karbohidrat (g)': 400, 'Serat (g)': 34,
-    },
-    "Laki-laki Dewasa (19-29)": {
-        'Energi (kkal)': 2650, 'Protein (g)': 65, 'Lemak (g)': 75, 'Karbohidrat (g)': 430, 'Serat (g)': 37,
     }
 }
 
@@ -92,7 +89,7 @@ st.subheader("Pilih Profil Gizi")
 profile_choice = st.selectbox(
     "Pilih profil AKG Harian:",
     options=list(akg_profiles.keys()),
-    index=len(akg_profiles)-1, 
+    index=1, 
     label_visibility="visible" 
 )
 
