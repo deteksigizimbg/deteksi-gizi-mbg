@@ -2,19 +2,9 @@ import streamlit as st
 from PIL import Image
 import pandas as pd
 from ultralytics import YOLO
+import numpy as np
 
 # --- PENGATURAN DASAR & DATA ---
-
-hide_st_style = """
-                <style>
-                .stToolbarActions {visibility: hidden;}
-                #MainMenu {visibility: hidden;}
-                ._terminalButton_rix23_138 {visibility: hidden;}
-                footer {visibility: hidden;}
-                </style>
-"""
-
-st.markdown(hide_st_style, unsafe_allow_html=True)
 
 st.set_page_config(
     page_title="Analisis Gizi Makan Siang",
@@ -44,33 +34,44 @@ akg_profiles = {
 }
 
 PORSI_MAKAN_SIANG = 0.35  # 35% dari jumlah kebutuhan harian
-
 data_gizi = {
     'nama_makanan': [
         'nasi_putih', 'ayam', 'nasi_kuning', 'nasi_liwet', 'buah_jeruk', 
         'buah_melon', 'buah_pisang', 'buah_duku', 'sayur_capcay', 
         'sayur_wortel_kacang', 'sayur', 'wortel', 'susu', 'tahu', 'tempe', 
-        'tempe_bacem', 'ayam_kecap', 'buah_semangka'
+        'tempe_bacem', 'ayam_kecap', 'buah_semangka',
+        'roti', 'burger', 'omelet', 'nasi_labu_kuning', 'stik_singkong_labu',
+        'oregano', 'ikan'
     ],
     'Energi (kkal)': [
-        140, 250, 180, 190, 70, 34, 105, 70, 80, 60, 50, 41, 80, 80, 100, 110, 220, 45
+        140, 250, 180, 190, 70, 34, 105, 70, 80, 60, 50, 41, 80, 80, 100, 110, 220, 45,
+        130, 450, 150, 160, 180,
+        5, 180                    
     ],
     'Protein (g)': [
-        3, 25, 4, 4.5, 1.5, 0.8, 1.3, 1, 4, 2.5, 2, 0.9, 4, 7, 9, 10, 23, 0.9
+        3, 25, 4, 4.5, 1.5, 0.8, 1.3, 1, 4, 2.5, 2, 0.9, 4, 7, 9, 10, 23, 0.9,
+        4.5, 25, 13, 3.5, 3,
+        0.1, 22
     ],
     'Lemak (g)': [
-        0.3, 15, 5, 6, 0.2, 0.2, 0.4, 0.2, 4, 3, 2.5, 0.2, 4.5, 6, 6, 5, 10, 0.2
+        0.3, 15, 5, 6, 0.2, 0.2, 0.4, 0.2, 4, 3, 2.5, 0.2, 4.5, 6, 6, 5, 10, 0.2,
+        1.5, 20, 10, 3, 7,
+        0.1, 10
     ],
     'Karbohidrat (g)': [
-        30, 2, 30, 31, 18, 8, 27, 17, 9, 7, 6, 10, 6, 2, 8, 10, 10, 11
+        30, 2, 30, 31, 18, 8, 27, 17, 9, 7, 6, 10, 6, 2, 8, 10, 10, 11,
+        25, 30, 2, 28, 25,
+        1, 0
     ],
     'Serat (g)': [
-        0.5, 0, 1, 1, 3.5, 0.9, 3.1, 4, 3.5, 3, 3, 2.8, 0, 1, 1.5, 1.4, 0.5, 0.6
+        0.5, 0, 1, 1, 3.5, 0.9, 3.1, 4, 3.5, 3, 3, 2.8, 0, 1, 1.5, 1.4, 0.5, 0.6,
+        2, 4, 0.5, 2.5, 4,
+        0.2, 0
     ]
 }
 df_gizi = pd.DataFrame(data_gizi)
-# Buat daftar semua makanan yang diketahui untuk dropdown
-all_known_foods = list(data_gizi['nama_makanan'])
+
+all_known_foods = sorted(list(data_gizi['nama_makanan'])) 
 
 
 # --- FUNGSI & MODEL ---
@@ -119,7 +120,6 @@ if uploaded_file is not None:
                     class_name = model.names[int(box.cls)]
                     detected_objects.add(class_name)
             
-            # Tampilkan apa yang terdeteksi
             if detected_objects:
                 st.success(f"**Otomatis terdeteksi:** {', '.join(list(detected_objects))}")
             else:
@@ -128,19 +128,16 @@ if uploaded_file is not None:
             st.write("---")
             st.subheader("Koreksi & Konfirmasi Manual")
             
-            # Konversi set ke list agar bisa jadi nilai default
             detected_list = list(detected_objects) 
-            
+           
             final_food_list = st.multiselect(
                 "Periksa hasil deteksi. Tambah/hapus item untuk konfirmasi manual:",
                 options=all_known_foods,
-                default=detected_list
+                default=detected_list  
             )
-    
-            # Cek apakah ada makanan untuk dihitung
+            
             if final_food_list:
                 
-                # Ubah ke set untuk perhitungan (menghindari duplikat jika ada)
                 final_food_set = set(final_food_list)
                 
                 estimasi = df_gizi[df_gizi['nama_makanan'].isin(final_food_set)]
@@ -176,9 +173,8 @@ if uploaded_file is not None:
                     st.success("🎉 **Luar biasa!** Kebutuhan gizi untuk makan siang Anda sudah **Terpenuhi Sempurna** untuk semua komponen.")
                 else:
                     komponen_string = ", ".join(komponen_kurang)
-                    st.warning(f"**Perhatian:** Porsi makan siang Anda masih **belum memenuhi target** untuk komponen: **{komponen_string}**.")
+                    st.warning(f"**Perhatian:** Porsi makan siang Anda masih **belum memenuhi target** untuk komponen: **{komlepon_string}**.")
                     st.info("Pastikan untuk melengkapi kebutuhan gizi ini di waktu makan lainnya atau dengan menambahkan porsi.")
             
             else:
-                # Ini hanya muncul jika model tidak mendeteksi DAN pengguna menghapus semuanya
                 st.warning("Tidak ada makanan yang dipilih untuk dianalisis.")
