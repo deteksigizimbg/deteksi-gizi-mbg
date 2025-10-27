@@ -15,10 +15,6 @@ st.set_page_config(
 st.title('🍱 Analisis Gizi Seimbang Makan Bergizi Gratis')
 st.write("Unggah gambar nampan makanan Anda. Aplikasi ini akan menganalisis pemenuhan gizinya berdasarkan porsi 'Makan Siang' (35%) dari Angka Kecukupan Gizi (AKG) Kemenkes.")
 
-# ==============================================================================
-# PERUBAHAN 1: Menambahkan Kolin (mg) dan Folat (µg) ke AKG Harian
-# =Setting nilai tengah dari rentang yang Anda berikan
-# ==============================================================================
 akg_profiles = {
     "Anak SD (7-12 Tahun)": {
         'Energi (kkal)': 1825, 'Protein (g)': 48, 'Lemak (g)': 60, 'Karbohidrat (g)': 275, 'Serat (g)': 26,
