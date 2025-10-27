@@ -15,22 +15,32 @@ st.set_page_config(
 st.title('🍱 Analisis Gizi Seimbang Makan Bergizi Gratis')
 st.write("Unggah gambar nampan makanan Anda. Aplikasi ini akan menganalisis pemenuhan gizinya berdasarkan porsi 'Makan Siang' (35%) dari Angka Kecukupan Gizi (AKG) Kemenkes.")
 
+# ==============================================================================
+# PERUBAHAN 1: Menambahkan Kolin (mg) dan Folat (µg) ke AKG Harian
+# =Setting nilai tengah dari rentang yang Anda berikan
+# ==============================================================================
 akg_profiles = {
     "Anak SD (7-12 Tahun)": {
         'Energi (kkal)': 1825, 'Protein (g)': 48, 'Lemak (g)': 60, 'Karbohidrat (g)': 275, 'Serat (g)': 26,
+        'Kolin (mg)': 313, 'Folat (µg)': 350 # Baru
     },
     "Anak SMP (13-15 Tahun)": {
         'Energi (kkal)': 2225, 'Protein (g)': 68, 'Lemak (g)': 75, 'Karbohidrat (g)': 325, 'Serat (g)': 32,
+        'Kolin (mg)': 388, 'Folat (µg)': 400 # Baru
     },
     "Anak SMA (16-18 Tahun)": {
         'Energi (kkal)': 2375, 'Protein (g)': 70, 'Lemak (g)': 78, 'Karbohidrat (g)': 350, 'Serat (g)': 33,
+        'Kolin (mg)': 413, 'Folat (µg)': 400 # Baru
     },
     "Ibu Hamil (Trimester 2 & 3)": {
         'Energi (kkal)': 2550, 'Protein (g)': 90, 'Lemak (g)': 70, 'Karbohidrat (g)': 400, 'Serat (g)': 34,
+        'Kolin (mg)': 500, 'Folat (µg)': 600 # Baru
     }
 }
 
-PORSI_MAKAN_SIANG = 0.35  # 35% dari jumlah kebutuhan harian
+
+PORSI_MAKAN_SIANG = 0.35
+
 data_gizi = {
     'nama_makanan': [
         'nasi_putih', 'ayam', 'nasi_kuning', 'nasi_liwet', 'buah_jeruk', 
@@ -42,34 +52,36 @@ data_gizi = {
     ],
     'Energi (kkal)': [
         140, 250, 180, 190, 70, 34, 105, 70, 80, 60, 50, 41, 80, 80, 100, 110, 220, 45,
-        130, 450, 150, 160, 180,
-        5, 180                    
+        130, 450, 150, 160, 180, 5, 180
     ],
     'Protein (g)': [
         3, 25, 4, 4.5, 1.5, 0.8, 1.3, 1, 4, 2.5, 2, 0.9, 4, 7, 9, 10, 23, 0.9,
-        4.5, 25, 13, 3.5, 3,
-        0.1, 22
+        4.5, 25, 13, 3.5, 3, 0.1, 22
     ],
     'Lemak (g)': [
         0.3, 15, 5, 6, 0.2, 0.2, 0.4, 0.2, 4, 3, 2.5, 0.2, 4.5, 6, 6, 5, 10, 0.2,
-        1.5, 20, 10, 3, 7,
-        0.1, 10
+        1.5, 20, 10, 3, 7, 0.1, 10
     ],
     'Karbohidrat (g)': [
         30, 2, 30, 31, 18, 8, 27, 17, 9, 7, 6, 10, 6, 2, 8, 10, 10, 11,
-        25, 30, 2, 28, 25,
-        1, 0
+        25, 30, 2, 28, 25, 1, 0
     ],
     'Serat (g)': [
         0.5, 0, 1, 1, 3.5, 0.9, 3.1, 4, 3.5, 3, 3, 2.8, 0, 1, 1.5, 1.4, 0.5, 0.6,
-        2, 4, 0.5, 2.5, 4,
-        0.2, 0
+        2, 4, 0.5, 2.5, 4, 0.2, 0
+    ],
+    'Kolin (mg)': [
+        2, 75, 3, 3, 8, 7, 10, 5, 30, 20, 15, 6, 20, 25, 30, 30, 70, 4,
+        10, 80, 290, 12, 15, 0.1, 60
+    ],
+    'Folat (µg)': [
+        5, 8, 6, 6, 30, 20, 20, 10, 40, 45, 30, 15, 6, 20, 25, 25, 8, 3,
+        40, 60, 50, 25, 30, 1, 10
     ]
 }
+
 df_gizi = pd.DataFrame(data_gizi)
-
 all_known_foods = sorted(list(data_gizi['nama_makanan'])) 
-
 
 # --- FUNGSI & MODEL ---
 @st.cache_resource
@@ -89,7 +101,7 @@ st.subheader("Pilih Profil Gizi")
 profile_choice = st.selectbox(
     "Pilih profil AKG Harian:",
     options=list(akg_profiles.keys()),
-    index=1, 
+    index=0,
     label_visibility="visible" 
 )
 
@@ -126,7 +138,7 @@ if uploaded_file is not None:
             st.subheader("Koreksi & Konfirmasi Manual")
             
             detected_list = list(detected_objects) 
-           
+            
             final_food_list = st.multiselect(
                 "Periksa hasil deteksi. Tambah/hapus item untuk konfirmasi manual:",
                 options=all_known_foods,
@@ -169,7 +181,7 @@ if uploaded_file is not None:
                 if not komponen_kurang:
                     st.success("🎉 **Luar biasa!** Kebutuhan gizi untuk makan siang Anda sudah **Terpenuhi Sempurna** untuk semua komponen.")
                 else:
-                    komponen_string = ", ".join(komponen_kurang)
+                    komponen_string = ", ".join(komKolinponen_kurang)
                     st.warning(f"**Perhatian:** Porsi makan siang Anda masih **belum memenuhi target** untuk komponen: **{komponen_string}**.")
                     st.info("Pastikan untuk melengkapi kebutuhan gizi ini di waktu makan lainnya atau dengan menambahkan porsi.")
             
