@@ -17,25 +17,25 @@ st.write("Unggah gambar nampan makanan Anda. Aplikasi ini akan menganalisis peme
 
 akg_profiles = {
     "Anak SD (7-12 Tahun)": {
-        'Energi (kkal)': 1825, 'Protein (g)': 48, 'Lemak (g)': 60, 'Karbohidrat (g)': 275, 'Serat (g)': 26,
-        'Kolin (mg)': 313, 'Folat (µg)': 350 # Baru
+        'Energi (kkal)': 1600, 'Protein (g)': 40, 'Lemak (g)': 60, 'Karbohidrat (g)': 275, 'Serat (g)': 26,
+        'Kolin (mg)': 250, 'Folat (µg)': 300 
     },
     "Anak SMP (13-15 Tahun)": {
-        'Energi (kkal)': 2225, 'Protein (g)': 68, 'Lemak (g)': 75, 'Karbohidrat (g)': 325, 'Serat (g)': 32,
-        'Kolin (mg)': 388, 'Folat (µg)': 400 # Baru
+        'Energi (kkal)': 2000, 'Protein (g)': 60, 'Lemak (g)': 75, 'Karbohidrat (g)': 325, 'Serat (g)': 32,
+        'Kolin (mg)': 375, 'Folat (µg)': 400 
     },
     "Anak SMA (16-18 Tahun)": {
-        'Energi (kkal)': 2375, 'Protein (g)': 70, 'Lemak (g)': 78, 'Karbohidrat (g)': 350, 'Serat (g)': 33,
-        'Kolin (mg)': 413, 'Folat (µg)': 400 # Baru
+        'Energi (kkal)': 2200, 'Protein (g)': 65, 'Lemak (g)': 78, 'Karbohidrat (g)': 350, 'Serat (g)': 33,
+        'Kolin (mg)': 400, 'Folat (µg)': 400 
     },
     "Ibu Hamil (Trimester 2 & 3)": {
-        'Energi (kkal)': 2550, 'Protein (g)': 90, 'Lemak (g)': 70, 'Karbohidrat (g)': 400, 'Serat (g)': 34,
-        'Kolin (mg)': 500, 'Folat (µg)': 600 # Baru
+        'Energi (kkal)': 2500, 'Protein (g)': 70, 'Lemak (g)': 70, 'Karbohidrat (g)': 400, 'Serat (g)': 34,
+        'Kolin (mg)': 450, 'Folat (µg)': 600 
     }
 }
 
 
-PORSI_MAKAN_SIANG = 0.35
+PORSI_MAKAN_SIANG = 0.30
 
 data_gizi = {
     'nama_makanan': [
